@@ -7,6 +7,12 @@ import (
 	"github.com/andygrunwald/go-jira"
 )
 
+var customfieldsMap = map[string]string{
+	"qa_contact":     "customfield_12315948",
+	"severity":       "customfield_12316142",
+	"target_version": "customfield_12319940",
+}
+
 // GetUnknownField will attempt to get the specified field from the Unknowns struct and unmarshal
 // the value into the provided function. If the field is not set, the first return value of this
 // function will return false.
@@ -57,7 +63,7 @@ type SecurityLevel struct {
 
 func GetIssueQaContact(issue *jira.Issue) (*jira.User, error) {
 	var obj *jira.User
-	isSet, err := GetUnknownField("customfield_12316243", issue, func() interface{} {
+	isSet, err := GetUnknownField(customfieldsMap["qa_contact"], issue, func() interface{} {
 		obj = &jira.User{}
 		return obj
 	})
@@ -69,7 +75,7 @@ func GetIssueQaContact(issue *jira.Issue) (*jira.User, error) {
 
 func GetIssueTargetVersion(issue *jira.Issue) ([]*jira.Version, error) {
 	var obj *[]*jira.Version
-	isSet, err := GetUnknownField("customfield_12319940", issue, func() interface{} {
+	isSet, err := GetUnknownField(customfieldsMap["target_version"], issue, func() interface{} {
 		obj = &[]*jira.Version{{}}
 		return obj
 	})
@@ -81,7 +87,7 @@ func GetIssueTargetVersion(issue *jira.Issue) ([]*jira.Version, error) {
 
 func GetIssueSeverity(issue *jira.Issue) (*Severity, error) {
 	var obj *Severity
-	isSet, err := GetUnknownField("customfield_12316142", issue, func() interface{} {
+	isSet, err := GetUnknownField(customfieldsMap["severity"], issue, func() interface{} {
 		obj = &Severity{}
 		return obj
 	})
